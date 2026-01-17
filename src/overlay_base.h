@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QPoint>
 #include <QUrl>
 #include <utility>
 
@@ -22,6 +23,7 @@ public:
     ~OverlayBase() override = default;
 
     Q_INVOKABLE void reload() const;
+    Q_INVOKABLE QPoint mousePos() const;
 
     void setEngine(QQmlApplicationEngine* engine) { m_engine = engine; }
 

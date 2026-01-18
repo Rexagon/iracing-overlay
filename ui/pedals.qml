@@ -7,11 +7,14 @@ Window {
     visible: true
     modality: Qt.WindowModal
     flags: Qt.CustomizeWindowHint | Qt.WindowStaysOnTopHint
-    width: 300
+    width: 500
     height: 100
     color: "#202028"
 
     readonly property int padding: 5
+    readonly property color clutchColor: "#0159cd"
+    readonly property color brakeColor: "#b31e1b"
+    readonly property color throttleColor: "#58d42e"
 
     Shortcut {
         sequence: "Esc"
@@ -38,12 +41,33 @@ Window {
     }
 
     Rectangle {
+        anchors.left: pedals.right
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.margins: window.padding
+        radius: 2
+        color: "#101018"
+
+        PedalsChart {
+            id: pedalsChart
+            clutchColor: window.clutchColor
+            brakeColor: window.brakeColor
+            throttleColor: window.throttleColor
+            anchors.fill: parent
+            Component.onCompleted: {
+                overlay.setPedalsChart(pedalsChart);
+            }
+        }
+    }
+
+    Rectangle {
         id: pedals
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.margins: window.padding
-        width: 80
+        width: 90
         radius: 2
         color: '#303038'
 
@@ -79,7 +103,7 @@ Window {
                     Rectangle {
                         anchors.fill: parent
                         anchors.topMargin: parent.height * (1.0 - overlay.clutch / 100.0)
-                        color: "#0159cd"
+                        color: window.clutchColor
                         radius: 2
                     }
                 }
@@ -107,7 +131,7 @@ Window {
                     Rectangle {
                         anchors.fill: parent
                         anchors.topMargin: parent.height * (1.0 - overlay.brake / 100.0)
-                        color: "#b31e1b"
+                        color: window.brakeColor
                         radius: 2
                     }
                 }
@@ -135,22 +159,11 @@ Window {
                     Rectangle {
                         anchors.fill: parent
                         anchors.topMargin: parent.height * (1.0 - overlay.throttle / 100.0)
-                        color: "#58d42e"
+                        color: window.throttleColor
                         radius: 2
                     }
                 }
             }
         }
-    }
-
-    Rectangle {
-        id: plot
-        anchors.left: pedals.right
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.margins: window.padding
-        radius: 2
-        color: "#101018"
     }
 }

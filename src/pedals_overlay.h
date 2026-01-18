@@ -1,9 +1,12 @@
 #pragma once
 
 #include "overlay_base.h"
+#include "util.h"
 
 namespace app
 {
+class PedalsChart;
+
 class PedalsOverlay : public OverlayBase {
     Q_OBJECT
 
@@ -16,20 +19,13 @@ public:
 
     ~PedalsOverlay() override = default;
 
-#define IMPL_PROPERTY(type, prop, setProp, propChanged, member) \
-    type prop() const { return member; }                        \
-    void setProp(type value)                                    \
-    {                                                           \
-        if (value == member) {                                  \
-            return;                                             \
-        }                                                       \
-        member = value;                                         \
-        emit propChanged();                                     \
-    }
-
     IMPL_PROPERTY(int, clutch, setClutch, clutchChanged, m_clutch)
     IMPL_PROPERTY(int, brake, setBrake, brakeChanged, m_brake)
     IMPL_PROPERTY(int, throttle, setThrottle, throttleChanged, m_throttle)
+
+    Q_INVOKABLE void setPedalsChart(PedalsChart* chart);
+
+    void flushChart();
 
 signals:
     void clutchChanged();
@@ -37,8 +33,10 @@ signals:
     void throttleChanged();
 
 private:
-    int m_clutch = 50;
+    int m_clutch = 0;
     int m_brake = 0;
     int m_throttle = 0;
+
+    PedalsChart* m_chart = nullptr;
 };
 }  // namespace app

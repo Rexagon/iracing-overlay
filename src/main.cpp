@@ -33,8 +33,10 @@ int main(int argc, char** argv)
         while (isRunning.load(std::memory_order_relaxed)) {
             // TEMP
             const auto mousePos = overlay.mousePos();
-            overlay.setClutch(static_cast<int>(mousePos.x() * 100 / screenSize.width()));
-            overlay.setBrake(static_cast<int>(mousePos.y() * 100 / screenSize.height()));
+            overlay.setBrake(static_cast<int>(mousePos.x() * 100 / (screenSize.width() - 1)));
+            overlay.setThrottle(static_cast<int>(mousePos.y() * 100 / (screenSize.height() - 1)));
+
+            overlay.flushChart();
 
             now += interval;
             std::this_thread::sleep_until(now);
